@@ -13,7 +13,7 @@ public class Mojo extends AbstractMojo {
 
     @Override
     public void execute () throws MojoExecutionException, MojoFailureException {
-        
+
     }
 }
 
