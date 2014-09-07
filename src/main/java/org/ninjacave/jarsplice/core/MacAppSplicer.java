@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
-import java.util.ArrayList;
 import java.util.jar.JarOutputStream;
 import java.util.jar.Manifest;
 import java.util.zip.ZipEntry;
@@ -73,9 +72,9 @@ public class MacAppSplicer extends Splicer
       addZipFolder(os, appName + "Contents/Resources/");
       addZipFolder(os, appName + "Contents/Resources/Java/");
 
-      addZipEntry("res/Contents/PkgInfo", os, appName + "Contents/PkgInfo", false);
-      addZipEntry("res/Contents/MacOS/JavaApplicationStub", os, appName + "Contents/MacOS/JavaApplicationStub", true);
-      addZipEntry("res/Contents/MacOS/mac_launch_fd.sh", os, appName + "Contents/MacOS/mac_launch_fd.sh", true);
+      addZipEntry("src/main/resources/Contents/PkgInfo", os, appName + "Contents/PkgInfo", false);
+      addZipEntry("src/main/resources/Contents/MacOS/JavaApplicationStub", os, appName + "Contents/MacOS/JavaApplicationStub", true);
+      addZipEntry("src/main/resources/Contents/MacOS/mac_launch_fd.sh", os, appName + "Contents/MacOS/mac_launch_fd.sh", true);
 
       File iconFile = null;
 

@@ -3,14 +3,13 @@ package org.ninjacave.jarsplice.core;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.jar.JarOutputStream;
 import java.util.jar.Manifest;
 import java.util.zip.ZipEntry;
 
 public class WinExeSplicer extends Splicer
 {
-  String stubFile = "res/stub.exe";
+  String stubFile = "src/main/resources/stub.exe";
 
   public void createFatJar(String[] jars, String[] natives, String output, String mainClass, String vmArgs) throws Exception {
     this.dirs.clear();

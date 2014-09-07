@@ -17,3 +17,9 @@ Now, as I still wanted to get acquainted with the internals of JarSplice, I've d
 Therefore, the source package org.ninjacave.jarsplice contains the source code obtained from decompiling JarSplice using Java Decompiler (http://java.decompiler.free.fr/?q=jdgui) and slightly modified.
 
 In the future, I'll implement support for exporting executable files from the command-line, and for exporting and importing projects from the GUI.
+
+Maven splice
+=============
+
+
+This is a fork of the above project packaged as a maven plugin.
