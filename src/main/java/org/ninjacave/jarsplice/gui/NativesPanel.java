@@ -14,94 +14,91 @@ import javax.swing.border.TitledBorder;
 import javax.swing.filechooser.FileFilter;
 
 public class NativesPanel extends JPanel
-  implements ActionListener
-{
-  JarSpliceFrame jarSplice;
-  JFileChooser fileChooser;
-  JList list;
-  DefaultListModel listModel = new DefaultListModel();
-  JButton addButton;
-  JButton removeButton;
-  File[] selectedFiles;
+        implements ActionListener {
+    JarSpliceFrame jarSplice;
+    JFileChooser fileChooser;
+    JList<String> list;
+    DefaultListModel<String> listModel = new DefaultListModel<String>();
+    JButton addButton;
+    JButton removeButton;
+    File[] selectedFiles;
 
-  public NativesPanel(JarSpliceFrame jarSplice)
-  {
-    this.jarSplice = jarSplice;
+    public NativesPanel (JarSpliceFrame jarSplice) {
+        this.jarSplice = jarSplice;
 
-    this.fileChooser = new JFileChooser();
-    this.fileChooser.setMultiSelectionEnabled(true);
-    this.fileChooser.setAcceptAllFileFilterUsed(false);
+        this.fileChooser = new JFileChooser();
+        this.fileChooser.setMultiSelectionEnabled(true);
+        this.fileChooser.setAcceptAllFileFilterUsed(false);
 
-    FileFilter filter = new FileFilter() {
-      public boolean accept(File file) {
-        if (file.isDirectory()) return true;
-        String filename = file.getName();
+        FileFilter filter = new FileFilter() {
+            public boolean accept (File file) {
+                if (file.isDirectory()) return true;
+                String filename = file.getName();
 
-        return (filename.endsWith(".dll")) || 
-          (filename.endsWith(".so")) || 
-          (filename.endsWith(".jnilib")) || 
-          (filename.endsWith(".dylib"));
-      }
-      public String getDescription() {
-        return "*.dll, *.so, *.jnilib, *.dylib";
-      }
-    };
-    this.fileChooser.setFileFilter(filter);
+                return (filename.endsWith(".dll")) ||
+                        (filename.endsWith(".so")) ||
+                        (filename.endsWith(".jnilib")) ||
+                        (filename.endsWith(".dylib"));
+            }
 
-    setLayout(new BorderLayout(5, 5));
+            public String getDescription () {
+                return "*.dll, *.so, *.jnilib, *.dylib";
+            }
+        };
+        this.fileChooser.setFileFilter(filter);
 
-    this.list = new JList(this.listModel);
-    add(this.list, "Center");
+        setLayout(new BorderLayout(5, 5));
 
-    TitledBorder border = BorderFactory.createTitledBorder("Add Natives");
-    border.setTitleJustification(2);
-    setBorder(border);
+        this.list = new JList<String>(this.listModel);
+        add(this.list, "Center");
 
-    JPanel buttonPanel = new JPanel();
+        TitledBorder border = BorderFactory.createTitledBorder("Add Natives");
+        border.setTitleJustification(TitledBorder.CENTER);
+        setBorder(border);
 
-    this.addButton = new JButton("Add Native(s)");
-    this.addButton.addActionListener(this);
-    buttonPanel.add(this.addButton);
+        JPanel buttonPanel = new JPanel();
 
-    this.removeButton = new JButton("Remove Native(s)");
-    this.removeButton.addActionListener(this);
-    buttonPanel.add(this.removeButton);
+        this.addButton = new JButton("Add Native(s)");
+        this.addButton.addActionListener(this);
+        buttonPanel.add(this.addButton);
 
-    add(buttonPanel, "Last");
-  }
+        this.removeButton = new JButton("Remove Native(s)");
+        this.removeButton.addActionListener(this);
+        buttonPanel.add(this.removeButton);
 
-  public String[] getSelectedFiles() {
-    if (this.selectedFiles == null) return new String[0];
-
-    String[] files = new String[this.listModel.getSize()];
-
-    for (int i = 0; i < files.length; i++) {
-      files[i] = ((String)this.listModel.get(i));
+        add(buttonPanel, "Last");
     }
 
-    return files;
-  }
+    public String[] getSelectedFiles () {
+        if (this.selectedFiles == null) return new String[0];
 
-  public void actionPerformed(ActionEvent e) {
-    if (e.getSource() == this.addButton)
-    {
-      this.fileChooser.setCurrentDirectory(this.jarSplice.lastDirectory);
-      int value = this.fileChooser.showDialog(this, "Add");
-      this.jarSplice.lastDirectory = this.fileChooser.getCurrentDirectory();
+        String[] files = new String[this.listModel.getSize()];
 
-      if (value == 0) {
-        this.selectedFiles = this.fileChooser.getSelectedFiles();
-
-        for (int i = 0; i < this.selectedFiles.length; i++) {
-          this.listModel.removeElement(this.selectedFiles[i].getAbsolutePath());
-          this.listModel.addElement(this.selectedFiles[i].getAbsolutePath());
+        for (int i = 0; i < files.length; i++) {
+            files[i] = (this.listModel.get(i));
         }
-      }
+
+        return files;
     }
-    else if (e.getSource() == this.removeButton) {
-      Object[] selectedItems = this.list.getSelectedValues();
-      for (int i = 0; i < selectedItems.length; i++)
-        this.listModel.removeElement(selectedItems[i]);
+
+    public void actionPerformed (ActionEvent e) {
+        if (e.getSource() == this.addButton) {
+            this.fileChooser.setCurrentDirectory(this.jarSplice.lastDirectory);
+            int value = this.fileChooser.showDialog(this, "Add");
+            this.jarSplice.lastDirectory = this.fileChooser.getCurrentDirectory();
+
+            if (value == 0) {
+                this.selectedFiles = this.fileChooser.getSelectedFiles();
+
+                for (File selectedFile : this.selectedFiles) {
+                    this.listModel.removeElement(selectedFile.getAbsolutePath());
+                    this.listModel.addElement(selectedFile.getAbsolutePath());
+                }
+            }
+        } else if (e.getSource() == this.removeButton) {
+            for (String selectedItem : this.list.getSelectedValuesList()) {
+                this.listModel.removeElement(selectedItem);
+            }
+        }
     }
-  }
 }

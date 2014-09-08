@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-import org.ninjacave.jarsplice.JarSpliceLauncher;
+import co.notime.jarspliceplus.XmlHandler;
 import org.ninjacave.jarsplice.core.MacAppSplicer;
 import org.ninjacave.jarsplice.core.ShellScriptSplicer;
 import org.ninjacave.jarsplice.core.Splicer;
@@ -16,28 +16,28 @@ import javax.xml.parsers.SAXParserFactory;
 
 public class JarSplicePlusLauncher {
 
-	public enum Target {
-		NONE,
-		INPUTJARS,
-		INPUTNATIVES,
-		MAINCLASS,
-		PARAMETERS,
-		OUTPUT,
+    public enum Target {
+        NONE,
+        INPUT_JARS,
+        INPUT_NATIVES,
+        MAIN_CLASS,
+        PARAMETERS,
+        OUTPUT,
         XML
-	}
+    }
 
     private JarSpliceParams jarSpliceParams;
     private Splicer spl;
-    private Target  current;
+    private Target current;
 
     public JarSplicePlusLauncher (String[] args) {
         jarSpliceParams = new JarSpliceParams();
-        spl             = new Splicer();
-        current         = Target.NONE;
+        spl = new Splicer();
+        current = Target.NONE;
         parseInput(args);
     }
 
-    public static void main(String args[]) {
+    public static void main (String args[]) {
         new JarSplicePlusLauncher(args);
     }
 
@@ -56,29 +56,17 @@ public class JarSplicePlusLauncher {
         }
     }
 
-    private String getFilePath (String fileName) {
-        String path = new File(fileName).getAbsolutePath();
-        if (File.separatorChar != '/') {
-            path = path.replace(File.separatorChar, '/');
-        }
-
-        if (!path.startsWith("/")) {
-            path = "/" + path;
-        }
-        return path;
-    }
-
     private void parseParams (String[] args) {
         // Parse and check parameters
         for (String arg : args) {
             if (arg.equals("-x")) {
                 current = Target.XML;
             } else if (arg.equals("-i")) {
-                current = Target.INPUTJARS;
+                current = Target.INPUT_JARS;
             } else if (arg.equals("-n")) {
-                current = Target.INPUTNATIVES;
+                current = Target.INPUT_NATIVES;
             } else if (arg.equals("-m")) {
-                current = Target.MAINCLASS;
+                current = Target.MAIN_CLASS;
             } else if (arg.equals("-p")) {
                 current = Target.PARAMETERS;
             } else if (arg.equals("-o")) {
@@ -105,7 +93,7 @@ public class JarSplicePlusLauncher {
     }
 
     private void confirmPaths () {
-        for (String path: jarSpliceParams.getRequiredPaths()) {
+        for (String path : jarSpliceParams.getRequiredPaths()) {
             confirmPath(path);
         }
     }
@@ -160,7 +148,8 @@ public class JarSplicePlusLauncher {
             System.out.println(message);
         }
         if (jarSpliceParams.shRequested()) {
-            System.lineSeparator();System.setProperty("line.separator", "\n");
+            System.lineSeparator();
+            System.setProperty("line.separator", "\n");
             String message;
             try {
                 ShellScriptSplicer shSpl = new ShellScriptSplicer();
@@ -203,15 +192,15 @@ public class JarSplicePlusLauncher {
                 System.out.println("Parsing config from xml file: " + arg);
                 handleXmlParam(arg);
                 break;
-            case INPUTJARS:
+            case INPUT_JARS:
                 System.out.println("Input JAR files: " + arg);
                 jarSpliceParams.inputJar(arg);
                 break;
-            case INPUTNATIVES:
+            case INPUT_NATIVES:
                 System.out.println("Input native files: " + arg);
                 jarSpliceParams.inputNative(arg);
                 break;
-            case MAINCLASS:
+            case MAIN_CLASS:
                 jarSpliceParams.mainClass(arg);
                 current = Target.NONE;
                 break;
@@ -225,90 +214,90 @@ public class JarSplicePlusLauncher {
         }
     }
 
-	public static void error(String text) {
-		System.out.println("Error: "+text);
-		System.out.println("");
-		help();
-		System.exit(1);
-	}
+    public static void error (String text) {
+        System.out.println("Error: " + text);
+        System.out.println("");
+        help();
+        System.exit(1);
+    }
 
-	public static void help() {
-		System.out.println("JarSplicePlus - An Extension to JarSplice");
-		System.out.println("Copyright (c) 2013, Luis Quesada - https://github.com/lquesada");
-		System.out.println("");
-		System.out.println("Call without arguments to open the GUI.");
-		System.out.println("");
-		System.out.println("Usage: java -jar JarSplicePlus.jar -i <input JAR file list>");
-		System.out.println("                                 [-n <input native file list>]");
-		System.out.println("                                  -m <main class>");
-		System.out.println("                                 [-p <JVM parameters>]");
-		System.out.println("                                 [-o <output JAR file>]");
+    public static void help () {
+        System.out.println("JarSplicePlus - An Extension to JarSplice");
+        System.out.println("Copyright (c) 2013, Luis Quesada - https://github.com/lquesada");
+        System.out.println("");
+        System.out.println("Call without arguments to open the GUI.");
+        System.out.println("");
+        System.out.println("Usage: java -jar JarSplicePlus.jar -i <input JAR file list>");
+        System.out.println("                                 [-n <input native file list>]");
+        System.out.println("                                  -m <main class>");
+        System.out.println("                                 [-p <JVM parameters>]");
+        System.out.println("                                 [-o <output JAR file>]");
         System.out.println("                                 [-x <xml config file>]");
-		System.out.println("");
-		System.out.println("Example: Bundling a complete application.");
-		System.out.println("");
-		System.out.println("Application JAR file:");
-		System.out.println("");
-		System.out.println(" - MyApplication.jar");
-		System.out.println("");
-		System.out.println("Main class:");
-		System.out.println("");
-		System.out.println(" - org.myapplication.mainClass");
-		System.out.println("");
-		System.out.println("JVM parameters:");
-		System.out.println("");
-		System.out.println(" -Xms256m -Xmx512m");
-		System.out.println("");
-		System.out.println("JAR libraries:");
-		System.out.println("");
-		System.out.println(" - lib/lwjgl-2.9.0/jar/lwjgl.jar");
-		System.out.println(" - lib/lwjgl-2.9.0/jar/lwjgl_util.jar");
-		System.out.println(" - lib/lwjgl-2.9.0/jar/jinput.jar");
-		System.out.println(" - lib/slick-util/slick-util.jar");
-		System.out.println("");
-		System.out.println("Native library files for distinct operating systems:");
-		System.out.println("");
-		System.out.println("- lib/lwjgl-2.9.0/native/linux/libjinput-linux64.so");
-		System.out.println("- lib/lwjgl-2.9.0/native/linux/libjinput-linux.so");
-		System.out.println("- lib/lwjgl-2.9.0/native/linux/liblwjgl64.so");
-		System.out.println("- lib/lwjgl-2.9.0/native/linux/liblwjgl.so");
-		System.out.println("- lib/lwjgl-2.9.0/native/macosx/libjinput-osx.jnilib");
-		System.out.println("- lib/lwjgl-2.9.0/native/macosx/liblwjgl.jnilib");
-		System.out.println("- lib/lwjgl-2.9.0/native/windows/jinput-dx8_64.dll");
-		System.out.println("- lib/lwjgl-2.9.0/native/windows/jinput-dx8.dll");
-		System.out.println("- lib/lwjgl-2.9.0/native/windows/jinput-raw_64.dll");
-		System.out.println("- lib/lwjgl-2.9.0/native/windows/jinput-raw.dll");
-		System.out.println("- lib/lwjgl-2.9.0/native/windows/lwjgl64.dll");
-		System.out.println("- lib/lwjgl-2.9.0/native/windows/lwjgl.dll");
-		System.out.println("");
-		System.out.println("Output JAR file:");
-		System.out.println("");
-		System.out.println(" - MyBundledApplication.jar");
-		System.out.println("");
-		System.out.println("Bundle them together issuing:");
-		System.out.println("");
-		System.out.println("java -jar JarSplicePlus.jar \\");
-		System.out.println("                        -i MyApplication.jar \\");
-		System.out.println("                           lib/lwjgl-2.9.0/jar/lwjgl.jar \\");
-		System.out.println("                           lib/lwjgl-2.9.0/jar/lwjgl_util.jar \\");
-		System.out.println("                           lib/lwjgl-2.9.0/jar/jinput.jar \\");
-		System.out.println("                           lib/slick-util/*.jar \\");
-		System.out.println("                        -n lib/lwjgl-2.9.0/native/linux/libjinput-linux64.so \\");
-		System.out.println("                           lib/lwjgl-2.9.0/native/linux/libjinput-linux.so \\");
-		System.out.println("                           lib/lwjgl-2.9.0/native/linux/liblwjgl64.so \\");
-		System.out.println("                           lib/lwjgl-2.9.0/native/linux/liblwjgl.so \\");
-		System.out.println("                           lib/lwjgl-2.9.0/native/macosx/libjinput-osx.jnilib \\");
-		System.out.println("                           lib/lwjgl-2.9.0/native/macosx/liblwjgl.jnilib \\");
-		System.out.println("                           lib/lwjgl-2.9.0/native/windows/jinput-dx8_64.dll \\");
-		System.out.println("                           lib/lwjgl-2.9.0/native/windows/jinput-dx8.dll \\");
-		System.out.println("                           lib/lwjgl-2.9.0/native/windows/jinput-raw_64.dll \\");
-		System.out.println("                           lib/lwjgl-2.9.0/native/windows/jinput-raw.dll \\");
-		System.out.println("                           lib/lwjgl-2.9.0/native/windows/lwjgl64.dll \\");
-		System.out.println("                           lib/lwjgl-2.9.0/native/windows/lwjgl.dll \\");
-		System.out.println("                        -m org.myapplication.mainClass \\");
-		System.out.println("                        -p -Xms256m -Xmx512m \\");
-		System.out.println("                        -o MyBundledApplication.jar");
-		System.out.println("");
-	}
+        System.out.println("");
+        System.out.println("Example: Bundling a complete application.");
+        System.out.println("");
+        System.out.println("Application JAR file:");
+        System.out.println("");
+        System.out.println(" - MyApplication.jar");
+        System.out.println("");
+        System.out.println("Main class:");
+        System.out.println("");
+        System.out.println(" - org.myapplication.mainClass");
+        System.out.println("");
+        System.out.println("JVM parameters:");
+        System.out.println("");
+        System.out.println(" -Xms256m -Xmx512m");
+        System.out.println("");
+        System.out.println("JAR libraries:");
+        System.out.println("");
+        System.out.println(" - lib/lwjgl-2.9.0/jar/lwjgl.jar");
+        System.out.println(" - lib/lwjgl-2.9.0/jar/lwjgl_util.jar");
+        System.out.println(" - lib/lwjgl-2.9.0/jar/jinput.jar");
+        System.out.println(" - lib/slick-util/slick-util.jar");
+        System.out.println("");
+        System.out.println("Native library files for distinct operating systems:");
+        System.out.println("");
+        System.out.println("- lib/lwjgl-2.9.0/native/linux/libjinput-linux64.so");
+        System.out.println("- lib/lwjgl-2.9.0/native/linux/libjinput-linux.so");
+        System.out.println("- lib/lwjgl-2.9.0/native/linux/liblwjgl64.so");
+        System.out.println("- lib/lwjgl-2.9.0/native/linux/liblwjgl.so");
+        System.out.println("- lib/lwjgl-2.9.0/native/macosx/libjinput-osx.jnilib");
+        System.out.println("- lib/lwjgl-2.9.0/native/macosx/liblwjgl.jnilib");
+        System.out.println("- lib/lwjgl-2.9.0/native/windows/jinput-dx8_64.dll");
+        System.out.println("- lib/lwjgl-2.9.0/native/windows/jinput-dx8.dll");
+        System.out.println("- lib/lwjgl-2.9.0/native/windows/jinput-raw_64.dll");
+        System.out.println("- lib/lwjgl-2.9.0/native/windows/jinput-raw.dll");
+        System.out.println("- lib/lwjgl-2.9.0/native/windows/lwjgl64.dll");
+        System.out.println("- lib/lwjgl-2.9.0/native/windows/lwjgl.dll");
+        System.out.println("");
+        System.out.println("Output JAR file:");
+        System.out.println("");
+        System.out.println(" - MyBundledApplication.jar");
+        System.out.println("");
+        System.out.println("Bundle them together issuing:");
+        System.out.println("");
+        System.out.println("java -jar JarSplicePlus.jar \\");
+        System.out.println("                        -i MyApplication.jar \\");
+        System.out.println("                           lib/lwjgl-2.9.0/jar/lwjgl.jar \\");
+        System.out.println("                           lib/lwjgl-2.9.0/jar/lwjgl_util.jar \\");
+        System.out.println("                           lib/lwjgl-2.9.0/jar/jinput.jar \\");
+        System.out.println("                           lib/slick-util/*.jar \\");
+        System.out.println("                        -n lib/lwjgl-2.9.0/native/linux/libjinput-linux64.so \\");
+        System.out.println("                           lib/lwjgl-2.9.0/native/linux/libjinput-linux.so \\");
+        System.out.println("                           lib/lwjgl-2.9.0/native/linux/liblwjgl64.so \\");
+        System.out.println("                           lib/lwjgl-2.9.0/native/linux/liblwjgl.so \\");
+        System.out.println("                           lib/lwjgl-2.9.0/native/macosx/libjinput-osx.jnilib \\");
+        System.out.println("                           lib/lwjgl-2.9.0/native/macosx/liblwjgl.jnilib \\");
+        System.out.println("                           lib/lwjgl-2.9.0/native/windows/jinput-dx8_64.dll \\");
+        System.out.println("                           lib/lwjgl-2.9.0/native/windows/jinput-dx8.dll \\");
+        System.out.println("                           lib/lwjgl-2.9.0/native/windows/jinput-raw_64.dll \\");
+        System.out.println("                           lib/lwjgl-2.9.0/native/windows/jinput-raw.dll \\");
+        System.out.println("                           lib/lwjgl-2.9.0/native/windows/lwjgl64.dll \\");
+        System.out.println("                           lib/lwjgl-2.9.0/native/windows/lwjgl.dll \\");
+        System.out.println("                        -m org.myapplication.mainClass \\");
+        System.out.println("                        -p -Xms256m -Xmx512m \\");
+        System.out.println("                        -o MyBundledApplication.jar");
+        System.out.println("");
+    }
 }
 

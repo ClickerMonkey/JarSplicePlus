@@ -17,34 +17,34 @@ public class JarSpliceParams {
     private List<String> linuxNatives;
     private List<String> osxNatives;
     private List<String> requiredPaths;
-    private String       mainClass;
-    private String       parameters;
-    private String       output;
-    private String       outputDir;
-    private String       osxAppIcon;
-    private String       outputOsxApp;
-    private String       outputOsxAppDir;
-    private String       outputSh;
-    private String       outputShDir;
-    private String       name;
+    private String mainClass;
+    private String parameters;
+    private String output;
+    private String outputDir;
+    private String osxAppIcon;
+    private String outputOsxApp;
+    private String outputOsxAppDir;
+    private String outputSh;
+    private String outputShDir;
+    private String name;
 
     public JarSpliceParams () {
-        inputJars       = new ArrayList<String>();
-        inputNatives    = new ArrayList<String>();
-        windowsNatives  = new ArrayList<String>();
-        linuxNatives    = new ArrayList<String>();
-        osxNatives      = new ArrayList<String>();
-        requiredPaths   = new ArrayList<String>();
-        mainClass       = null;
-        parameters      = null;
-        output          = null;
-        outputDir       = null;
-        osxAppIcon      = null;
-        outputOsxApp    = null;
+        inputJars = new ArrayList<String>();
+        inputNatives = new ArrayList<String>();
+        windowsNatives = new ArrayList<String>();
+        linuxNatives = new ArrayList<String>();
+        osxNatives = new ArrayList<String>();
+        requiredPaths = new ArrayList<String>();
+        mainClass = null;
+        parameters = null;
+        output = null;
+        outputDir = null;
+        osxAppIcon = null;
+        outputOsxApp = null;
         outputOsxAppDir = null;
-        outputSh        = null;
-        outputShDir     = null;
-        name            = null;
+        outputSh = null;
+        outputShDir = null;
+        name = null;
     }
 
     public void outputSh (String outputSh) {
@@ -82,7 +82,7 @@ public class JarSpliceParams {
     public boolean osxAppRequested () {
         return osxAppIcon != null
                 && (outputOsxApp != null
-                    || outputOsxAppDir != null)
+                || outputOsxAppDir != null)
                 && name != null;
     }
 
@@ -102,28 +102,28 @@ public class JarSpliceParams {
 
     public void collectNativesInDir (String path) {
         File file = new File(path);
-        for (String nativeFileName: file.list()) {
+        for (String nativeFileName : file.list()) {
             inputNative(path + File.separator + nativeFileName);
         }
     }
 
     public void collectNativesInDirWindows (String path) {
         File file = new File(path);
-        for (String nativeFileName: file.list()) {
+        for (String nativeFileName : file.list()) {
             inputNativeWindows(path + File.separator + nativeFileName);
         }
     }
 
     public void collectNativesInDirLinux (String path) {
         File file = new File(path);
-        for (String nativeFileName: file.list()) {
+        for (String nativeFileName : file.list()) {
             inputNativeLinux(path + File.separator + nativeFileName);
         }
     }
 
     public void collectNativesInDirOsx (String path) {
         File file = new File(path);
-        for (String nativeFileName: file.list()) {
+        for (String nativeFileName : file.list()) {
             inputNativeOsx(path + File.separator + nativeFileName);
         }
     }
@@ -146,10 +146,6 @@ public class JarSpliceParams {
     public void inputNativeOsx (String inputNative) {
         osxNatives.add(inputNative);
         System.out.println("OSX native file: " + inputNative);
-    }
-
-    public List<String> getInputNatives () {
-        return inputNatives;
     }
 
     public List<String> getInputNativesWindows () {
@@ -209,7 +205,7 @@ public class JarSpliceParams {
     }
 
     public String getParameters () {
-        return hasParameters()? parameters: "";
+        return hasParameters() ? parameters : "";
     }
 
     public boolean hasParameters () {
@@ -234,7 +230,7 @@ public class JarSpliceParams {
     public String getOutput () {
         String output;
         if (outputDir != null
-            && name != null) {
+                && name != null) {
             output = outputDir + File.separator + name + ".jar";
         } else {
             output = this.output;
