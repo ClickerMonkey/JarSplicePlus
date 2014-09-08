@@ -68,9 +68,9 @@ public class MacAppPanel extends JPanel
         JPanel descriptionPanel = new JPanel();
         JLabel label = new JLabel();
         label.setText(
-                String.format("<html><div style=\"width:%dpx;\">%s</div><html>", new Object[]{
-                        Integer.valueOf(300),
-                        "This is an optional step and will create an OS X APP Bundle. If there are native files then only the Mac native files (*.jnilib and *.dylib) will be added to the APP Bundle."}));
+                String.format("<html><div style=\"width:%dpx;\">%s</div><html>",
+                        300,
+                        "This is an optional step and will create an OS X APP Bundle. If there are native files then only the Mac native files (*.jnilib and *.dylib) will be added to the APP Bundle."));
 
         descriptionPanel.add(label);
 
@@ -88,7 +88,7 @@ public class MacAppPanel extends JPanel
 
     public JPanel createNamePanel () {
         JPanel selectPanel = new JPanel();
-        selectPanel.setLayout(new FlowLayout(1, 0, 0));
+        selectPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
 
         JPanel pathPanel = new JPanel();
         this.nameTextField = new JTextField("");
@@ -108,9 +108,9 @@ public class MacAppPanel extends JPanel
         JPanel descriptionPanel = new JPanel();
         JLabel label = new JLabel();
         label.setText(
-                String.format("<html><div style=\"width:%dpx;\">%s</div><html>", new Object[]{
-                        Integer.valueOf(300),
-                        "Set the name of the APP Bundle."}));
+                String.format("<html><div style=\"width:%dpx;\">%s</div><html>",
+                        300,
+                        "Set the name of the APP Bundle."));
 
         descriptionPanel.add(label);
 
@@ -124,7 +124,7 @@ public class MacAppPanel extends JPanel
     public JPanel createIconPanel () {
         JPanel selectPanel = new JPanel();
 
-        selectPanel.setLayout(new FlowLayout(1, 0, 0));
+        selectPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
 
         JPanel pathPanel = new JPanel();
         this.iconTextField = new JTextField("");
@@ -149,9 +149,9 @@ public class MacAppPanel extends JPanel
         JPanel descriptionPanel = new JPanel();
         JLabel label = new JLabel();
         label.setText(
-                String.format("<html><div style=\"width:%dpx;\">%s</div><html>", new Object[]{
-                        Integer.valueOf(300),
-                        "Select the icon the app bundle will use. This should be in the Apple Icon Image format (*.icns)."}));
+                String.format("<html><div style=\"width:%dpx;\">%s</div><html>",
+                        300,
+                        "Select the icon the app bundle will use. This should be in the Apple Icon Image format (*.icns)."));
 
         descriptionPanel.add(label);
 

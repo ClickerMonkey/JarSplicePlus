@@ -49,9 +49,9 @@ public class ClassPanel extends JPanel
         JPanel centerPanel1 = new JPanel();
         JLabel label = new JLabel();
         label.setText(
-                String.format("<html><div style=\"width:%dpx;\">%s</div><html>", new Object[]{
-                        Integer.valueOf(300),
-                        "Enter your applications main class file below, complete with any packages that it maybe in.<br><br>e.g. mypackage.someotherpackage.MainClass<br> "}));
+                String.format("<html><div style=\"width:%dpx;\">%s</div><html>",
+                        300,
+                        "Enter your applications main class file below, complete with any packages that it maybe in.<br><br>e.g. mypackage.someotherpackage.MainClass<br> "));
 
         centerPanel1.add(label);
         mainClassBox.add(centerPanel1, "First");
@@ -67,7 +67,7 @@ public class ClassPanel extends JPanel
         mainClassBox.add(centerPanel2, "Center");
 
         JPanel centerPanel3 = new JPanel();
-        centerPanel3.setLayout(new FlowLayout(2));
+        centerPanel3.setLayout(new FlowLayout(FlowLayout.RIGHT));
         centerPanel3.add(this.optionsButton);
 
         mainClassBox.add(centerPanel3, "Last");
@@ -84,9 +84,9 @@ public class ClassPanel extends JPanel
         JPanel centerPanel3 = new JPanel();
         JLabel label2 = new JLabel();
         label2.setText(
-                String.format("<html><div style=\"width:%dpx;\">%s</div><html>", new Object[]{
-                        Integer.valueOf(300),
-                        "Enter any java VM arguments that you would like to start the java virtual machine with. Leave blank if you are unsure whether you need to enter something here.<br><br>e.g. -Xms128m -Xmx512m<br> "}));
+                String.format("<html><div style=\"width:%dpx;\">%s</div><html>",
+                        300,
+                        "Enter any java VM arguments that you would like to start the java virtual machine with. Leave blank if you are unsure whether you need to enter something here.<br><br>e.g. -Xms128m -Xmx512m<br> "));
 
         centerPanel3.add(label2);
         vmArgBox.add(centerPanel3, "First");
@@ -107,9 +107,9 @@ public class ClassPanel extends JPanel
         JPanel centerPanel5 = new JPanel();
         JLabel label3 = new JLabel();
         label3.setText(
-                String.format("<html><div style=\"width:%dpx;\">%s</div><html>", new Object[]{
-                        Integer.valueOf(300),
-                        "Note: Do not use the -cp and -Djava.library.path VM arguments as JarSplice uses them internally and adds them automatically.<br> "}));
+                String.format("<html><div style=\"width:%dpx;\">%s</div><html>",
+                        300,
+                        "Note: Do not use the -cp and -Djava.library.path VM arguments as JarSplice uses them internally and adds them automatically.<br> "));
 
         centerPanel5.add(label3);
         centerVmArgPanel.add(centerPanel5, "Center");

@@ -45,9 +45,9 @@ public class WinExePanel extends JPanel
         JPanel descriptionPanel = new JPanel();
         JLabel label = new JLabel();
         label.setText(
-                String.format("<html><div style=\"width:%dpx;\">%s</div><html>", new Object[]{
-                        Integer.valueOf(300),
-                        "This is an optional step and will create a Windows EXE File. "}));
+                String.format("<html><div style=\"width:%dpx;\">%s</div><html>",
+                        300,
+                        "This is an optional step and will create a Windows EXE File. "));
 
         descriptionPanel.add(label);
 

@@ -64,15 +64,15 @@ public class ShellScriptPanel extends JPanel
         setLayout(new BorderLayout(20, 20));
 
         TitledBorder border = BorderFactory.createTitledBorder("Create Linux ShellScript");
-        border.setTitleJustification(2);
+        border.setTitleJustification(TitledBorder.CENTER);
         setBorder(border);
 
         JPanel panel1 = new JPanel();
         JLabel label = new JLabel();
         label.setText(
-                String.format("<html><div style=\"width:%dpx;\">%s</div><html>", new Object[]{
-                        Integer.valueOf(300),
-                        "This is an optional step and will create a Linux shellscript. This shellscript will contain all the jars and natives just like the executable jar. If there are native files then only the Linux native files (*.so) will be added to the shellscript."}));
+                String.format("<html><div style=\"width:%dpx;\">%s</div><html>",
+                        300,
+                        "This is an optional step and will create a Linux shellscript. This shellscript will contain all the jars and natives just like the executable jar. If there are native files then only the Linux native files (*.so) will be added to the shellscript."));
 
         panel1.add(label);
         add(panel1, "First");
@@ -112,12 +112,12 @@ public class ShellScriptPanel extends JPanel
 
                     JOptionPane.showMessageDialog(this,
                             "ShellScript Successfully Created.",
-                            "Success", -1);
+                            "Success", JOptionPane.PLAIN_MESSAGE);
                 } catch (Exception ex) {
                     ex.printStackTrace();
                     JOptionPane.showMessageDialog(this,
                             "ShellScript creation failed due to the following exception:\n" + ex.getMessage(),
-                            "Failed", 0);
+                            "Failed", JOptionPane.ERROR_MESSAGE);
                 }
 
                 System.out.println("File Saved as " + output);
