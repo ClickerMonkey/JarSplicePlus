@@ -180,7 +180,7 @@ public class JarSpliceParams {
 
     public void mainClass (String mainClass) {
         if (this.mainClass != null) {
-            JarSplicePlusLauncher.error("Multiple declaration of main class.");
+            JarSplicePlus.error("Multiple declaration of main class.");
         } else {
             this.mainClass = mainClass;
             System.out.println("Main class: " + mainClass);
@@ -219,7 +219,7 @@ public class JarSpliceParams {
 
     public void output (String output) {
         if (this.output != null) {
-            JarSplicePlusLauncher.error("Multiple declaration of output JAR file.");
+            JarSplicePlus.error("Multiple declaration of output JAR file.");
         } else {
             requirePath(new File(output).getParent());
             this.output = output;

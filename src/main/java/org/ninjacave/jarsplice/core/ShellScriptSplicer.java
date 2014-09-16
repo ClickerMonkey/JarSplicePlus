@@ -9,7 +9,13 @@ import java.util.jar.Manifest;
 import java.util.zip.ZipEntry;
 
 public class ShellScriptSplicer extends Splicer {
-    String[] batchFile = {"#!/bin/sh", "FNAME=\"`readlink -f \"$0\"`\"", "java -jar \"$FNAME\"", "exit 0", ""};
+    String[] batchFile = {
+            "#!/bin/sh",
+            "FNAME=\"`readlink -f \"$0\"`\"",
+            "java -jar \"$FNAME\"",
+            "exit 0",
+            ""
+    };
 
     public void createFatJar (String[] jars, String[] natives, String output, String mainClass, String vmArgs)
             throws Exception {

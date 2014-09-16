@@ -3,18 +3,16 @@ package com.elezeta.jarspliceplus;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
-
 import co.notime.jarspliceplus.XmlHandler;
 import org.ninjacave.jarsplice.core.MacAppSplicer;
 import org.ninjacave.jarsplice.core.ShellScriptSplicer;
 import org.ninjacave.jarsplice.core.Splicer;
-import org.ninjacave.jarsplice.gui.JarSpliceFrame;
 import org.xml.sax.SAXException;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
-public class JarSplicePlusLauncher {
+public class JarSplicePlus {
 
     public enum Target {
         NONE,
@@ -27,37 +25,28 @@ public class JarSplicePlusLauncher {
     }
 
     private JarSpliceParams jarSpliceParams;
-    private Splicer spl;
-    private Target current;
+    private Splicer         spl;
+    private Target          current;
 
-    public JarSplicePlusLauncher (String[] args) {
+    public JarSplicePlus () {
         jarSpliceParams = new JarSpliceParams();
-        spl = new Splicer();
-        current = Target.NONE;
-        parseInput(args);
+        spl             = new Splicer();
+        current         = Target.NONE;
     }
 
-    public static void main (String args[]) {
-        new JarSplicePlusLauncher(args);
-    }
-
-    private void handleXmlParam (String fileName) {
-        System.out.println("Path: " + fileName);
-        SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
-        try {
-            SAXParser saxParser = saxParserFactory.newSAXParser();
-            saxParser.parse(new File(fileName), new XmlHandler(jarSpliceParams));
-        } catch (ParserConfigurationException e) {
-            System.out.println("bad sax config");
-        } catch (SAXException e) {
-            System.out.println("sax is busted");
-        } catch (IOException e) {
-            System.out.println("io problem");
+    public void runCmdJarSplice (String [] args) {
+        if (args.length == 1
+                && args[0].equals("-h")) {
+            help();
+            System.exit(0);
+        } else {
+            parseParams(args);
+            verifyInput();
+            invokeJarSplice();
         }
     }
 
-    private void parseParams (String[] args) {
-        // Parse and check parameters
+    public void parseParams (String[] args) {
         for (String arg : args) {
             if (arg.equals("-x")) {
                 current = Target.XML;
@@ -74,6 +63,21 @@ public class JarSplicePlusLauncher {
             } else {
                 performTargetAction(arg);
             }
+        }
+    }
+
+    private void handleXmlParam (String fileName) {
+        System.out.println("Path: " + fileName);
+        SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
+        try {
+            SAXParser saxParser = saxParserFactory.newSAXParser();
+            saxParser.parse(new File(fileName), new XmlHandler(jarSpliceParams));
+        } catch (ParserConfigurationException e) {
+            System.out.println("bad sax config");
+        } catch (SAXException e) {
+            System.out.println("sax is busted");
+        } catch (IOException e) {
+            System.out.println("io problem");
         }
     }
 
@@ -167,20 +171,6 @@ public class JarSplicePlusLauncher {
             System.out.println(message);
         }
         System.exit(0);
-    }
-
-    private void parseInput (String[] args) {
-        if (args.length == 0) {
-            new JarSpliceFrame();
-        } else if (args.length == 1
-                && args[0].equals("-h")) {
-            help();
-            System.exit(0);
-        } else {
-            parseParams(args);
-            verifyInput();
-            invokeJarSplice();
-        }
     }
 
     private void performTargetAction (String arg) {
