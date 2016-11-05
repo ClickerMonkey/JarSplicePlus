@@ -7,7 +7,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
-import java.io.PrintStream;
+import java.util.HashSet;
+
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -21,6 +22,7 @@ import javax.swing.filechooser.FileFilter;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.PlainDocument;
+
 import org.ninjacave.jarsplice.core.MacAppSplicer;
 
 public class MacAppPanel extends JPanel
@@ -252,7 +254,7 @@ public class MacAppPanel extends JPanel
         String vmArgs = this.jarSplice.getVmArgs();
         try
         {
-          this.macAppSplicer.createAppBundle(sources, natives, output, mainClass, vmArgs, this.nameTextField.getText(), this.iconTextField.getText());
+          this.macAppSplicer.createAppBundle(sources, natives, output, mainClass, vmArgs, this.nameTextField.getText(), this.iconTextField.getText(), new HashSet<String>());
 
           JOptionPane.showMessageDialog(this, 
             "APP Bundle Successfully Created.", 

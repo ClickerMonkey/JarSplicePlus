@@ -29,7 +29,10 @@ public class XmlHandler extends DefaultHandler {
         if (temp != null) {
             if (qName.equalsIgnoreCase("inputJar")) {
                 jarSpliceParams.inputJar(temp);
-
+                
+            } else if (qName.equalsIgnoreCase("inputJarDir")) {
+            	jarSpliceParams.inputJarDir(temp);
+            	
             } else if (qName.equalsIgnoreCase("inputNative")) {
                 jarSpliceParams.inputNative(temp);
 
@@ -72,12 +75,19 @@ public class XmlHandler extends DefaultHandler {
             } else if (qName.equalsIgnoreCase("outputShDir")) {
                 jarSpliceParams.outputShDir(temp);
 
+            } else if (qName.equalsIgnoreCase("outputWin")) {
+                jarSpliceParams.outputWin(temp);
+
+            } else if (qName.equalsIgnoreCase("outputWinDir")) {
+                jarSpliceParams.outputWinDir(temp);
+
             } else if (qName.equalsIgnoreCase("name")) {
                 jarSpliceParams.name(temp);
 
             } else if (qName.equalsIgnoreCase("requiredPath")) {
                 jarSpliceParams.requirePath(temp);
-
+            } else if (qName.equalsIgnoreCase("preserveManifest")) {
+            	jarSpliceParams.preserveManifest(temp);
             }
         }
     }

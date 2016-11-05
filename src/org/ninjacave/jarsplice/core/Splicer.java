@@ -5,11 +5,14 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.Map.Entry;
+import java.util.Set;
 import java.util.jar.Attributes;
 import java.util.jar.JarOutputStream;
 import java.util.jar.Manifest;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
+
 import org.ninjacave.jarsplice.JarSplice;
 
 public class Splicer
@@ -18,10 +21,11 @@ public class Splicer
   int bufferSize;
   byte[] buffer = new byte[4096];
 
-  public void createFatJar(String[] jars, String[] natives, String output, String mainClass, String vmArgs) throws Exception {
+  public void createFatJar(String[] jars, String[] natives, String output, String mainClass, String vmArgs, Set<String> preserveManifests) throws Exception {
     this.dirs.clear();
 
     Manifest manifest = getManifest(mainClass, vmArgs);
+    buildManifest(jars, manifest, preserveManifests);
 
     FileOutputStream fos = new FileOutputStream(output);
     JarOutputStream jos = new JarOutputStream(fos, manifest);
@@ -46,6 +50,43 @@ public class Splicer
     attribute.putValue("Launcher-VM-Args", vmArgs);
 
     return manifest;
+  }
+  
+  protected void buildManifest(String[] jars, Manifest mainManifest, Set<String> preserveManifests) throws Exception
+  {
+	  for (int i = 0; i < jars.length; i++)
+	  {
+		  if (!preserveManifests.contains(jars[i])) {
+			  continue;
+		  }
+		  
+			ZipFile jarFile = new ZipFile(jars[i]);
+
+			Enumeration entities = jarFile.entries();
+
+			while (entities.hasMoreElements()) {
+				ZipEntry entry = (ZipEntry) entities.nextElement();
+
+				if (entry.getName().toLowerCase().endsWith("manifest.mf")) {
+					InputStream in = jarFile.getInputStream(jarFile
+							.getEntry(entry.getName()));
+					Manifest manifest = new Manifest(in);
+
+					Attributes mainAttrs = mainManifest.getMainAttributes();
+					Attributes otherAttrs = manifest.getMainAttributes();
+
+					for (Entry<Object, Object> e : otherAttrs.entrySet()) {
+						Object existing = mainAttrs.get(e.getKey());
+
+						if (existing == null) {
+							mainAttrs.put(e.getKey(), e.getValue());
+						}
+					}
+				}
+			}
+
+			jarFile.close();
+		}
   }
 
   protected void addFilesFromJars(String[] jars, JarOutputStream out) throws Exception

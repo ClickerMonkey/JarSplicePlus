@@ -2,7 +2,9 @@ package com.elezeta.jarspliceplus;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * User: lachlan.krautz
@@ -17,6 +19,7 @@ public class JarSpliceParams {
     private List<String> linuxNatives;
     private List<String> osxNatives;
     private List<String> requiredPaths;
+    private Set<String>  preserveManifests;
     private String       mainClass;
     private String       parameters;
     private String       output;
@@ -26,6 +29,8 @@ public class JarSpliceParams {
     private String       outputOsxAppDir;
     private String       outputSh;
     private String       outputShDir;
+    private String 		 outputWin;
+    private String 		 outputWinDir;
     private String       name;
 
     public JarSpliceParams () {
@@ -35,6 +40,7 @@ public class JarSpliceParams {
         linuxNatives    = new ArrayList<String>();
         osxNatives      = new ArrayList<String>();
         requiredPaths   = new ArrayList<String>();
+        preserveManifests = new HashSet<String>();
         mainClass       = null;
         parameters      = null;
         output          = null;
@@ -44,6 +50,8 @@ public class JarSpliceParams {
         outputOsxAppDir = null;
         outputSh        = null;
         outputShDir     = null;
+        outputWin		= null;
+        outputWinDir	= null;
         name            = null;
     }
 
@@ -55,6 +63,24 @@ public class JarSpliceParams {
     public void outputShDir (String outputShDir) {
         requirePath(outputShDir);
         this.outputShDir = outputShDir;
+    }
+
+    public void outputWin (String outputWin) {
+        requirePath(new File(outputWin).getParent());
+        this.outputWin = outputWin;
+    }
+
+    public void outputWinDir (String outputWinDir) {
+        requirePath(outputWinDir);
+        this.outputWinDir = outputWinDir;
+    }
+    
+    public void preserveManifest(String path) {
+    	preserveManifests.add(path);
+    }
+    
+    public Set<String> getPreserveManifests() {
+    	return this.preserveManifests;
     }
 
     public void requirePath (String path) {
@@ -90,6 +116,13 @@ public class JarSpliceParams {
         requirePath(new File(inputJar).getParent());
         inputJars.add(inputJar);
         System.out.println("Input jar file: " + inputJar);
+    }
+    
+    public void inputJarDir (String path) {
+        File file = new File(path);
+        for (String nativeFileName: file.list()) {
+        	inputJar(path + File.separator + nativeFileName);
+        }
     }
 
     public List<String> getInputJars () {
@@ -276,9 +309,25 @@ public class JarSpliceParams {
         return outputSh;
     }
 
+    public String getOutputWin () {
+        String outputWin;
+        if (outputWinDir != null && name != null) {
+            outputWin = outputWinDir + File.separator + name + ".exe";
+        } else {
+        	outputWin = this.outputWin;
+        }
+        return outputWin;
+    }
+
     public boolean shRequested () {
         return (outputSh != null
                 || outputShDir != null)
+                && name != null;
+    }
+
+    public boolean winRequested () {
+        return (outputWin != null
+                || outputWinDir != null)
                 && name != null;
     }
 

@@ -4,6 +4,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Set;
 import java.util.jar.JarOutputStream;
 import java.util.jar.Manifest;
 import java.util.zip.ZipEntry;
@@ -12,7 +13,8 @@ public class WinExeSplicer extends Splicer
 {
   String stubFile = "res/stub.exe";
 
-  public void createFatJar(String[] jars, String[] natives, String output, String mainClass, String vmArgs) throws Exception {
+  @Override
+  public void createFatJar(String[] jars, String[] natives, String output, String mainClass, String vmArgs, Set<String> preserveManifests) throws Exception {
     this.dirs.clear();
 
     FileOutputStream fos = new FileOutputStream(output);
@@ -34,6 +36,8 @@ public class WinExeSplicer extends Splicer
     fos.flush();
 
     Manifest manifest = getManifest(mainClass, vmArgs);
+    buildManifest(jars, manifest, preserveManifests);
+    
     JarOutputStream jos = new JarOutputStream(fos, manifest);
     try
     {

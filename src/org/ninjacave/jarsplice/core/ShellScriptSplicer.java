@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
+import java.util.Set;
 import java.util.jar.JarOutputStream;
 import java.util.jar.Manifest;
 import java.util.zip.ZipEntry;
@@ -13,7 +14,8 @@ public class ShellScriptSplicer extends Splicer
 {
   String[] batchFile = { "#!/bin/sh", "FNAME=\"`readlink -f \"$0\"`\"", "java -jar \"$FNAME\"", "exit 0", "" };
 
-  public void createFatJar(String[] jars, String[] natives, String output, String mainClass, String vmArgs)
+  @Override
+  public void createFatJar(String[] jars, String[] natives, String output, String mainClass, String vmArgs, Set<String> preserveManifests)
     throws Exception
   {
     this.dirs.clear();
@@ -30,6 +32,8 @@ public class ShellScriptSplicer extends Splicer
     fos.flush();
 
     Manifest manifest = getManifest(mainClass, vmArgs);
+    buildManifest(jars, manifest, preserveManifests);
+    
     JarOutputStream jos = new JarOutputStream(fos, manifest);
     try
     {

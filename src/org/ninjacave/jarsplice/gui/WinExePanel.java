@@ -6,7 +6,8 @@ import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.io.PrintStream;
+import java.util.HashSet;
+
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -17,6 +18,7 @@ import javax.swing.JTextField;
 import javax.swing.UIManager;
 import javax.swing.border.TitledBorder;
 import javax.swing.filechooser.FileFilter;
+
 import org.ninjacave.jarsplice.core.WinExeSplicer;
 
 public class WinExePanel extends JPanel
@@ -180,7 +182,7 @@ public class WinExePanel extends JPanel
         String vmArgs = this.jarSplice.getVmArgs();
         try
         {
-          this.winExeSplicer.createFatJar(sources, natives, output, mainClass, vmArgs);
+          this.winExeSplicer.createFatJar(sources, natives, output, mainClass, vmArgs, new HashSet<String>());
 
           JOptionPane.showMessageDialog(this, 
             "EXE Successfully Created.", 

@@ -3,7 +3,8 @@ package org.ninjacave.jarsplice.gui;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.io.PrintStream;
+import java.util.HashSet;
+
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -11,6 +12,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
 import javax.swing.filechooser.FileFilter;
+
 import org.ninjacave.jarsplice.core.Splicer;
 
 public class CreatePanel extends JPanel
@@ -98,7 +100,7 @@ public class CreatePanel extends JPanel
         String vmArgs = this.jarSplice.getVmArgs();
         try
         {
-          this.splicer.createFatJar(jars, natives, output, mainClass, vmArgs);
+          this.splicer.createFatJar(jars, natives, output, mainClass, vmArgs, new HashSet<String>());
 
           JOptionPane.showMessageDialog(this, 
             "Fat Jar Successfully Created.", 

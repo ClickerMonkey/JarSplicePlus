@@ -8,8 +8,10 @@ import org.ninjacave.jarsplice.JarSpliceLauncher;
 import org.ninjacave.jarsplice.core.MacAppSplicer;
 import org.ninjacave.jarsplice.core.ShellScriptSplicer;
 import org.ninjacave.jarsplice.core.Splicer;
+import org.ninjacave.jarsplice.core.WinExeSplicer;
 import org.ninjacave.jarsplice.gui.JarSpliceFrame;
 import org.xml.sax.SAXException;
+
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -111,10 +113,12 @@ public class JarSplicePlusLauncher {
     }
 
     private void confirmPath (String path) {
-        File file = new File(path);
-        if (file.mkdirs()) {
-            System.out.println("Created path: " + path);
-        }
+    	if (path != null) {
+            File file = new File(path);
+            if (file.mkdirs()) {
+                System.out.println("Created path: " + path);
+            }
+    	}
     }
 
     private String[] stringArray (List<String> list) {
@@ -130,7 +134,8 @@ public class JarSplicePlusLauncher {
                     stringArray(jarSpliceParams.getInputNativesWindows()),
                     jarSpliceParams.getOutput(),
                     jarSpliceParams.getMainClass(),
-                    jarSpliceParams.getParameters()
+                    jarSpliceParams.getParameters(),
+                    jarSpliceParams.getPreserveManifests()
             );
 
         } catch (Exception e) {
@@ -151,7 +156,8 @@ public class JarSplicePlusLauncher {
                         jarSpliceParams.getMainClass(),
                         jarSpliceParams.getParameters(),
                         jarSpliceParams.getName(),
-                        jarSpliceParams.getOsxAppIcon()
+                        jarSpliceParams.getOsxAppIcon(),
+                        jarSpliceParams.getPreserveManifests()
                 );
                 message = "APP Bundle Successfully Created.";
             } catch (Exception ex) {
@@ -169,11 +175,31 @@ public class JarSplicePlusLauncher {
                         stringArray(jarSpliceParams.getInputNativesLinux()),
                         jarSpliceParams.getOutputSh(),
                         jarSpliceParams.getMainClass(),
-                        jarSpliceParams.getParameters()
+                        jarSpliceParams.getParameters(),
+                        jarSpliceParams.getPreserveManifests()
                 );
                 message = "ShellScript Successfully Created.";
             } catch (Exception ex) {
                 message = "ShellScript creation failed due to the following exception:\n" + ex.getMessage();
+            }
+            System.out.println(message);
+        }
+        if (jarSpliceParams.winRequested()) {
+        	System.lineSeparator();System.setProperty("line.separator", "\r\n");
+        	String message;
+            try {
+            	WinExeSplicer winSpl = new WinExeSplicer();
+            	winSpl.createFatJar(
+                        sources,
+                        stringArray(jarSpliceParams.getInputNativesWindows()),
+                        jarSpliceParams.getOutputWin(),
+                        jarSpliceParams.getMainClass(),
+                        jarSpliceParams.getParameters(),
+                        jarSpliceParams.getPreserveManifests()
+                );
+                message = "Windows EXE Successfully Created.";
+            } catch (Exception ex) {
+                message = "Windows EXE creation failed due to the following exception:\n" + ex.getMessage();
             }
             System.out.println(message);
         }

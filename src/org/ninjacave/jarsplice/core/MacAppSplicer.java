@@ -8,9 +8,11 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
+import java.util.Set;
 import java.util.jar.JarOutputStream;
 import java.util.jar.Manifest;
 import java.util.zip.ZipEntry;
+
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
 import org.apache.commons.compress.archivers.zip.ZipArchiveOutputStream;
 
@@ -51,7 +53,7 @@ public class MacAppSplicer extends Splicer
     is.close();
   }
 
-  public void createAppBundle(String[] jars, String[] natives, String output, String mainClass, String vmArgs, String bundleName, String icon) throws Exception {
+  public void createAppBundle(String[] jars, String[] natives, String output, String mainClass, String vmArgs, String bundleName, String icon, Set<String> preserveManifests) throws Exception {
     this.dirs.clear();
 
     File tmpJarFile = new File(output + ".tmp");
@@ -89,7 +91,7 @@ public class MacAppSplicer extends Splicer
         addFileAsZipEntry(iconFile, os, appName + "Contents/Resources/" + iconFile.getName());
       }
 
-      createTmpJar(jars, natives, tmpJarFile, mainClass, vmArgs);
+      createTmpJar(jars, natives, tmpJarFile, mainClass, vmArgs, preserveManifests);
       addFileAsZipEntry(tmpJarFile, os, appName + "Contents/Resources/Java/app.jar");
 
       ZipArchiveEntry zae = new ZipArchiveEntry(appName + "Contents/Info.plist");
@@ -114,10 +116,12 @@ public class MacAppSplicer extends Splicer
     fos.close();
   }
 
-  private void createTmpJar(String[] jars, String[] natives, File tmpJarFile, String mainClass, String vmArgs) throws Exception {
+  private void createTmpJar(String[] jars, String[] natives, File tmpJarFile, String mainClass, String vmArgs, Set<String> preserveManifests) throws Exception {
     FileOutputStream fos = new FileOutputStream(tmpJarFile);
 
     Manifest manifest = getManifest(mainClass, vmArgs);
+    buildManifest(jars, manifest, preserveManifests);
+    
     JarOutputStream jos = new JarOutputStream(fos, manifest);
     try
     {
