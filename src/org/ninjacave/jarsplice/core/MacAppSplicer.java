@@ -194,7 +194,7 @@ public class MacAppSplicer extends Splicer
     pos.println("<string>$JAVAROOT/app.jar</string>");
     pos.println("</array>");
     pos.println("<key>JVMVersion</key>");
-    pos.println("<string>1.5+</string>");
+    pos.println("<string>1.8+</string>");
     pos.println("<key>MainClass</key>");
     pos.println("<string>org.ninjacave.jarsplice.JarSpliceLauncher</string>");
     pos.println("<key>WorkingDirectory</key>");
